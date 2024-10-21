@@ -15,20 +15,20 @@ class UserStorage {
   createUser(userData: Omit<User, 'id'>): User | undefined {
     const user: User = { id: uuidv4(), ...userData };
     this.users.set(user.id, user);
-    process.send && process.send({ type: "update", data: this.getAllUsers() });
+    if (process.send) process.send({ type: "update", data: this.getAllUsers() });
     return this.users.get(user.id);
   }
 
   updateUser(id: string, userData: Omit<User, 'id'>): User | undefined {
     const user: User = { id, ...userData };
     this.users.set(id, user);
-    process.send && process.send({ type: "update", data: this.getAllUsers() });
+    if (process.send) process.send({ type: "update", data: this.getAllUsers() });
     return this.users.get(user.id);
   }
 
   deleteUser(id: string): boolean {
     const isDeleted = this.users.delete(id);
-    process.send && process.send({ type: "update", data: this.getAllUsers() });
+    if (process.send) process.send({ type: "update", data: this.getAllUsers() });
     return isDeleted;
   }
 

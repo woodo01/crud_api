@@ -1,6 +1,7 @@
 import { config } from 'dotenv';
 import { cpus } from 'node:os';
 import cluster from 'node:cluster';
+import { Worker } from 'node:cluster';
 import {
   createServer,
   IncomingMessage,
@@ -29,7 +30,7 @@ const numCPUs: number = cpus().length - 1;
       console.error(`Error occurred in worker ${process.pid}: ${error.message}`);
     });
 
-    process.send && process.send({ type: "syncRequest" });
+    if (process.send) process.send({ type: "syncRequest" });
 
     process.on("message", (message: Message) => {
       if (message.type === "sync") {
@@ -69,7 +70,7 @@ const numCPUs: number = cpus().length - 1;
 
   loadBalancer.listen(PORT, () => console.log(`Load Balancer is listening on PORT: ${PORT}`));
 
-  let workers = [];
+  const workers: Worker[] = [];
   for (let i = 0; i < numCPUs; i++) {
     workers.push(cluster.fork());
   }
