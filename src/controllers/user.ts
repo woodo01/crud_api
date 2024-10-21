@@ -1,4 +1,4 @@
-import { IncomingMessage, ServerResponse, STATUS_CODES } from 'http';
+import { IncomingMessage, ServerResponse } from 'http';
 import { validate as isUuid } from 'uuid';
 import userStorage from '../storage/users'
 import { HttpStatusCode } from "../routes/users";
